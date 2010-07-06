@@ -1,12 +1,23 @@
 Autolisp Shell Extension
 ------------------------
-This extension enables Autolisp to run a shell command with stdout and stdin streams. A shelled process output to stdout can be read into an Autolisp application, and Autolisp strings can be written to the shelled process input stream. Communicating through stream pipes allows more control of the shelled process than the built in AutoCAD SHELL command or using WScript.
+This extension enables Autolisp to run a shell command with stdout and stdin streams. The shelled process' output to stdout can be read into an Autolisp application, and Autolisp strings can be written to the shelled process input stream. Communicating through stream pipes allows more control of the shelled process than the built in AutoCAD SHELL command or using WScript.
 
-This extension make four new commands available to Autolisp applications.
+ARX binaries are available of this extension for AutoCAD 2004-2010, from the [downloads button](http://github.com/pkohut/Autolisp-Shell-Extension/downloads)
 
+    ARX Binary           | Runs in AutoCAD version(s)
+    ____________________ | __________________________
+    RunShell_2004.arx    | 2004 - 2006
+    RunShell_2007.arx    | 2007 - 2009 32 bit
+    RunShell_2008_64.arx | 2008 - 2009 64 bit
+    RunShell_2010.arx    | 2010 32 bit
+    RunShell_2010_64.arx | 2010 64 bit
+
+
+New Commands Available to Autolisp
+----------------------------------
 __OpenShell__  
 Opens a shell child process, with input and output streams piped.  
-    (OpenShell string1 string2)
+Usage: (OpenShell string1 string2)
 
 * _string1_ the full path name of the application to shell. Environment variables are supported in the form of %ENV_VAR%.
 * _string2_ the command line string to send the shelled application. Environment variables are supported in the form of %ENV_VAR%.
@@ -20,8 +31,8 @@ Opens the cmd.exe program located usually at c:\windows\system32\cmd.exe", passe
 See CreateProcess documentation on MSDN for more information about the application name and command line strings and how they can be used.
 
 __CloseShell__  
-Closes a previously opened shell.
-    (CloseShell handle)
+Closes a previously opened shell.  
+Usage: (CloseShell handle)
 	
 * _handle_ the integer handle returned from the OpenShell command.
 * returns _T_ if success, _nil_ otherwise.
@@ -29,8 +40,8 @@ Closes a previously opened shell.
 Shells should be closed when no longer need. Each open shell is associated with a drawing that it was opened in. When a drawing is close any associated shells will be closed as well.
 
 __ReadShellData__  
-Reads the stdout stream from the shelled application.
-    (ReadShellData handle)
+Reads the stdout stream from the shelled application.  
+Usage: (ReadShellData handle)
 
 * _handle_ the integer handle returned from the OpenShell command.
 * returns a _string_ if success, _nil_ otherwise or no data left to retrieve.
@@ -40,8 +51,8 @@ Reads the stdout stream from the shelled command. Internally the buffer is limit
 _Note_ version 0.01 of the _Autolisp Shell Extension_ closes the stdin pipe when _ReadShellData_ is called, making future _WriteShellData_ calls to the shell return _nil_.
 
 __WriteShellData__  
-Writes to the stdin of the shell application
-    (WriteShellData handle string)
+Writes to the stdin of the shell application  
+Usage: (WriteShellData handle string)
 
 * _handle_ the integer handle returned from the OpenShell command.
 * _string_ to write to the shelled command, via the stdin stream.
@@ -52,16 +63,19 @@ Writes a string to the stdin of the shell command. The string is written as is t
 The stdin string is close if _ReadStringData_ is called.
 
 __GetLastShellError__  
-Gets the last shell error code integer and if possible a string version
-
-    (GetLastShellError)
+Gets the last shell error code integer and if possible a string version  
+Usage: (GetLastShellError)
 
 * return a list. First item is an integer error code (see GetLastError on MSDN), the second item in the list is a formatted string of the error code. This function is a single instance and does not use a handle.
 
 
-Installing
+Installing ARX Binaries
 ----------
-todo:
+Refer to the AutoCAD documentation on loading ARX applications.
+
+Compiling Source Code
+---------------------
+The source files include projects for building AutoCAD 2004, 2007, 2008 64 bit, 2010 32 bit, and 2010 64 bit, versions. To build the projects a properly setup ObjectARX developement platfom must be install (and everything that entails), VC Build Hook should also be install, google it for more info.
 
 Sample Usage
 ------------
